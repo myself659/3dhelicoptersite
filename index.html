@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>CF 2026 · Coaxial Compound Gunship | Tactical 3D Flight & Weapons System</title>
+  <meta name="description" content="Real-time 3D concept gunship. Fly it, fire it, cut it open.">
+  <meta name="theme-color" content="#04060a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2304060a'/%3E%3Cpath d='M20 3 L37 27 L29 24 L20 36 L11 24 L3 27 Z' fill='none' stroke='%235ef2ff' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M18 10 L9 15 L9 25 L18 30 L16 26 L12 23 L12 17 L16 14 Z' fill='%235ef2ff'/%3E%3Cpath d='M20 10 L31 10 L28 14 L24 14 L24 18 L29 18 L27 22 L24 22 L24 30 L20 30 Z' fill='%235ef2ff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-DXn8Plae.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BB5pmMu4.css">
+</head>
+<body>
+<div id="app"></div>
+<div id="labels"></div>
+<div id="flash"></div>
+
+<div id="ui">
+  <header id="brand">
+    <div class="logo">
+      <svg viewBox="0 0 40 40" width="30" height="30"><path d="M20 3 L37 27 L29 24 L20 36 L11 24 L3 27 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M18 10 L9 15 L9 25 L18 30 L16 26 L12 23 L12 17 L16 14 Z" fill="currentColor"/><path d="M20 10 L31 10 L28 14 L24 14 L24 18 L29 18 L27 22 L24 22 L24 30 L20 30 Z" fill="currentColor"/></svg>
+    </div>
+    <div>
+      <div class="name">CF <span>2026</span></div>
+      <div class="sub" data-i18n="brandSub">共轴复合式武装直升机 · 概念机体</div>
+    </div>
+  </header>
+
+  <nav id="themes" class="glass"></nav>
+  <button id="langBtn" class="glass icon" title="Toggle Language (中 / EN) [L]">
+    <span id="langName">中/EN</span>
+  </button>
+  <button id="soundBtn" class="glass icon" title="Sound (S)">
+    <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+
+  <aside id="rail">
+    <div class="group glass">
+      <div class="gtitle" data-i18n="viewTitle">视角</div>
+      <button data-view="orbit" class="on"><span data-i18n="viewOrbit">自由环绕</span><kbd>1</kbd></button>
+      <button data-view="chase"><span data-i18n="viewChase">机尾跟随</span><kbd>2</kbd></button>
+      <button data-view="cockpit"><span data-i18n="viewCockpit">飞行座舱</span><kbd>3</kbd></button>
+      <button data-view="cinema"><span data-i18n="viewCinema">电影运镜</span><kbd>4</kbd></button>
+    </div>
+    <div class="group glass">
+      <div class="gtitle" data-i18n="renderTitle">渲染</div>
+      <button data-mode="normal" class="on"><span data-i18n="renderSkin">隐身蒙皮</span><kbd>Q</kbd></button>
+      <button data-mode="xray"><span data-i18n="renderXray">透视蓝图</span><kbd>X</kbd></button>
+      <button data-mode="power"><span data-i18n="renderPower">动力总成</span><kbd>P</kbd></button>
+      <button data-mode="air"><span data-i18n="renderAir">气流气旋</span><kbd>A</kbd></button>
+      <button data-mode="explode"><span data-i18n="renderExplode">爆炸拆解</span><kbd>E</kbd></button>
+    </div>
+  </aside>
+
+  <div id="legend" class="glass"></div>
+
+  <section id="telemetry" class="glass mono">
+    <div class="trow phase"><span id="tPhase">冷机 · 停泊</span></div>
+    <canvas id="attitude" width="120" height="120"></canvas>
+    <div class="tgrid">
+      <div><label title="Rotor RPM">NR</label><b id="tRpm">0</b><i>%</i></div>
+      <div><label title="Altitude">ALT</label><b id="tAlt">0</b><i>m</i></div>
+      <div><label title="Airspeed">IAS</label><b id="tSpd">0</b><i>kt</i></div>
+      <div><label title="Heading">HDG</label><b id="tHdg">000</b><i>°</i></div>
+      <div><label title="Vertical Speed">VS</label><b id="tVs">0.0</b><i>m/s</i></div>
+      <div><label title="Torque">TQ</label><b id="tTq">0</b><i>%</i></div>
+      <div><label title="Turbine Temp">TGT</label><b id="tTgt">15</b><i>°C</i></div>
+      <div><label title="Fuel Level">FUEL</label><b id="tFuel">100</b><i>%</i></div>
+    </div>
+    <div class="rpmbar"><div id="tRpmBar"></div></div>
+  </section>
+
+  <section id="dock">
+    <div id="stances" class="glass">
+      <button data-stance="parked" class="on" data-i18n="stanceParked">停泊</button>
+      <button data-stance="board" data-i18n="stanceBoard">登机</button>
+      <button data-stance="combat" data-i18n="stanceCombat">战备</button>
+      <button data-stance="cruise" data-i18n="stanceCruise">巡航</button>
+      <button data-stance="stealth" data-i18n="stanceStealth">隐身</button>
+    </div>
+    <button id="flyBtn" title="Launch / Land (Space)">
+      <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="45"/><circle id="flyRing" class="ring" cx="50" cy="50" r="45"/></svg>
+      <span id="flyLabel" data-i18n="flyLaunch">起飞</span>
+      <small id="flySub">SPACE</small>
+    </button>
+    <div id="weapons" class="glass">
+      <button data-weapon="gun"><span data-i18n="wGun">30mm机炮</span><b id="aGun">1200</b><kbd>F</kbd></button>
+      <button data-weapon="rockets"><span data-i18n="wRockets">火箭弹</span><b id="aRkt">38</b><kbd>R</kbd></button>
+      <button data-weapon="missile"><span data-i18n="wMissile">制导导弹</span><b id="aMsl">6</b><kbd>M</kbd></button>
+      <button data-weapon="flares"><span data-i18n="wFlares">干扰弹</span><b id="aFlr">60</b><kbd>C</kbd></button>
+    </div>
+  </section>
+
+  <button id="helpBtn" class="glass icon" title="Keys (H / ?)">?</button>
+  <div id="help" class="glass">
+    <div class="gtitle" data-i18n="helpControls">战术战机系统操控手册</div>
+    <p><kbd>Space</kbd> <span data-i18n="helpFlight">起飞 / 降落 · 1–4 视角切换 · T 切换生物群系</span></p>
+    <p><kbd>Q X P A E</kbd> <span data-i18n="helpModes">蒙皮 · 透视 · 动力流 · 气流场 · 爆炸拆解</span></p>
+    <p><kbd>F R M C</kbd> <span data-i18n="helpWeapons">机炮连发 · 火箭弹齐射 · 制导导弹 · 干扰弹</span></p>
+    <p><kbd>S</kbd> <kbd>L</kbd> <span data-i18n="helpOther">音效开关 · 语言切换 · 鼠标拖拽环视 · 滚轮缩放</span></p>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<div id="fade"><div id="themeTitle"><div class="t1"></div><div class="t2"></div></div></div>
+<div id="loader"><div class="lname">CF <span>2026</span></div><div class="lbar"><div id="lprog"></div></div><div id="lmsg" class="mono">initialising</div></div>
+
+</body>
+</html>
