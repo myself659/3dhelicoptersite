@@ -4,4 +4,4 @@
 
 - 源码仓库: [3dhelicopter](https://github.com/myself659/3dhelicopter)
 - 预览页面: GitHub Pages 托管站点
-- 自动化同步构建时间: 2026-10-24T08:41:23.527Z
+- 自动化同步构建时间: 2026-10-24T08:42:12.945Z
