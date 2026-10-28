@@ -4,4 +4,4 @@
 
 - 源码仓库: [3dhelicopter](https://github.com/myself659/3dhelicopter)
 - 托管模式: GitHub Pages 原生静态托管（`Deploy from a branch: main + /(root)`，零 GitHub Actions 额度消耗）
-- 自动化同步构建时间: 2026-10-28T08:02:02.139Z
+- 自动化同步构建时间: 2026-10-28T08:03:40.289Z
